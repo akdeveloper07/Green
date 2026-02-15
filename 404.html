@@ -1,98 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Green Garden</title>
-    <link rel="stylesheet" href="login.css">
-  <style>
-              body {
-    font-family: Arial, sans-serif;
-    background: url('log.jpg') no-repeat center center/cover; 
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+<title>GreenGarden Invoice</title>
 
-.login-container {
-    width: 320px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+<style>
+body { background:#eaf5ef; font-family:Poppins; }
+#invoice {
+  width:800px;
+  margin:auto;
+  background:white;
+  position:relative;
 }
+#bg {
+  width:100%;
+}
+.text {
+  position:absolute;
+  color:#1b7f3b;
+  font-weight:600;
+}
+</style>
 
-.logo {
-    width: 100px;
-    display: block;
-    margin: 0 auto 10px;
-}
-
-input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    width: 100%;
-    background: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #388E3C;
-}
-
-footer {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    color: white;
-    text-shadow: 1px 1px 2px black;
-}
-  </style>
 </head>
-<body>    
-    <div class="login-container">
-        <img src="logo.png" alt="Green Garden Logo" class="logo">  
-        <h2>Login</h2>
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p>No gmail account <a href="home.html" class="Guest-link">Guest</a></p>
-        <p>Don't have an account? <a href="signup.html" class="signup-link">Sign up</a></p>
-    </div>
-    
-    <footer>
-        <p>&copy; 2025 Green Garden. All rights reserved.</p>
-    </footer>
-    
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            let email = document.getElementById('email').value;
 
-            if (!email.includes("@")) {
-                alert("Please enter a valid email.");
-                return;
-            }
+<body>
 
-            sessionStorage.setItem('loggedInUser', email);
-            window.location.href = 'home.html';
-        });
-    </script>
+<div id="invoice">
+
+<img src="invoice-template.png" id="bg">
+
+<!-- Order Data Overlay -->
+<div class="text" style="top:160px; left:80px;" id="orderId"></div>
+<div class="text" style="top:200px; left:80px;" id="date"></div>
+<div class="text" style="top:160px; right:80px;" id="customer"></div>
+
+</div>
+
+<button onclick="downloadPDF()">Download PDF</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+let order = JSON.parse(localStorage.getItem("order"));
+
+document.getElementById("orderId").innerText = "Invoice #: " + order.id;
+document.getElementById("date").innerText = "Date: " + order.date;
+document.getElementById("customer").innerText = "Invoice To: " + order.name;
+
+function downloadPDF(){
+ html2pdf().from(document.getElementById("invoice"))
+ .save("GreenGarden_Invoice.pdf");
+}
+</script>
+
 </body>
 </html>
+
